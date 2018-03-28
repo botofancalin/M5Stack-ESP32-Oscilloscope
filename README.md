@@ -31,5 +31,9 @@
 11. Trigger Level
 12. Trigger Edge: Rising (UP) or Falling (DN)
 
+Key B: Menu selection
+Key A: Selected item # - 
+Key C: Selected item # + 
+
 
  
