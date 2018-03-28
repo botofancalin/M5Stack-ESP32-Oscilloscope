@@ -1,6 +1,6 @@
 # M5Stack_Oscilloscope
 
-[image](M5Stack_Oscilloscope/2ChOsc.jpg)
+[image](M5Stack_Oscilloscope\2ChOsc.jpg)
 
 ## About
 - Fully functional Dual Channel Oscilloscope running on M5Stack ESP32 development kit
