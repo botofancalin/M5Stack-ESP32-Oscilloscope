@@ -1,4 +1,4 @@
-# M5Stack_Oscilloscope
+# M5Stack ESP32 Oscilloscope
 
 
 ![image](M5Stack_Oscilloscope/twoChOsc.jpg)
