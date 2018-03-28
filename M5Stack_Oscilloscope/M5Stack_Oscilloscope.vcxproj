@@ -85,7 +85,7 @@
     <ClInclude Include="__vm\.M5Stack_Oscilloscope.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="2ChOsc.jpg" />
+    <Image Include="twoChOsc.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

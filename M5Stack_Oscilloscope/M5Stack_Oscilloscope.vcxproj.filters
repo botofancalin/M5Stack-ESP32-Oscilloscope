@@ -23,7 +23,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="2ChOsc.jpg">
+    <Image Include="twoChOsc.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
