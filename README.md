@@ -13,9 +13,9 @@
 - SignaDelta Output: Pin 5
 
 ## Warning
-#### ESP32 MAXIMUM GPIO input voltage is 3.3V
-#### Feeding higher voltages on INPUT pin's can damage the chip
-#### Consider using a voltage divider to measure higher voltage signals
+#### - ESP32 MAXIMUM GPIO input voltage is 3.3V
+#### - Feeding higher voltages on INPUT pin's can damage the chip
+#### - Consider using a voltage divider to measure higher voltage signals
 
 ### Oscilloscope Menu:
 1. Run/Stop
