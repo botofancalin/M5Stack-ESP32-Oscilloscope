@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C5F80730-F44F-4478-BDAE-6634EFC2CA88}</ProjectGuid>
+    <RootNamespace>M5Stack_Oscilloscope</RootNamespace>
+    <ProjectName>M5Stack_Oscilloscope</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>
+    </PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>
+    </PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\M5Stack_Oscilloscope;C:\Program Files (x86)\Arduino\libraries;C:\Users\Calin\Documents\Arduino\libraries;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\libraries;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\cores\esp32;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\cores\esp32\libb64;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\variants\esp32;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\config;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\bluedroid;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\app_trace;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\app_update;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\bootloader_support;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\bt;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\driver;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\esp32;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\esp_adc_cal;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\ethernet;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\fatfs;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\freertos;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\heap;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\jsmn;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\log;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\mdns;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\mbedtls;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\mbedtls_port;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\newlib;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\nvs_flash;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\openssl;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\spi_flash;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\sdmmc;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\spiffs;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\tcpip_adapter;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\ulp;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\vfs;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\wear_levelling;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\xtensa-debug-module;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\coap;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\console;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\expat;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\json;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\lwip;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\nghttp;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\soc;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include\wpa_supplicant;C:\Users\Calin\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\xtensa-lx106-elf\include\c++\4.8.2;C:\Users\Calin\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\xtensa-lx106-elf\include\c++\4.8.2\xtensa-lx106-elf;C:\Users\Calin\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\xtensa-lx106-elf\include;C:\Users\Calin\AppData\Local\arduino15\packages\esp8266\tools\xtensa-lx106-elf-gcc\1.20.0-26-gb404fb9-2\lib\gcc\xtensa-lx106-elf\4.8.2\include;C:\Users\Calin\Documents\Arduino\hardware\espressif\esp32\tools\sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ProjectDir)__vm\.M5Stack_Oscilloscope.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <PreprocessorDefinitions>__ESP32_ESp32__;__ESP32_ESP32__;ESP_PLATFORM;HAVE_CONFIG_H;F_CPU=240000000L;ARDUINO=10805;ARDUINO_M5Stack_Core_ESP32;ARDUINO_ARCH_ESP32;ESP32;CORE_DEBUG_LEVEL=4;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="VisualMicro" />
+  </ItemGroup>
+  <PropertyGroup>
+    <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="M5Stack_Oscilloscope.ino">
+      <FileType>CppCode</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="__vm\.M5Stack_Oscilloscope.vsarduino.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
