@@ -1,6 +1,7 @@
-# M5Stack_Oscilloscope
+# M5Stack ESP32 Oscilloscope
 
-[image](2ChOsc.jpg)
+
+![image](M5Stack_Oscilloscope/twoChOsc.jpg)
 
 ## About
 - Fully functional Dual Channel Oscilloscope running on M5Stack ESP32 development kit
@@ -12,9 +13,9 @@
 - SignaDelta Output: Pin 5
 
 ## Warning
-### ESP32 MAXIMUM GPIO input voltage is 3.3V
-### Feeding higher voltages on INPUT pin's can damage the chip
-### Consider using a voltage divider to measure higher voltage signals
+#### - ESP32 MAXIMUM GPIO input voltage is 3.3V
+#### - Feeding higher voltages on INPUT pin's can damage the chip
+#### - Consider using a voltage divider to measure higher voltage signals
 
 ### Oscilloscope Menu:
 1. Run/Stop
