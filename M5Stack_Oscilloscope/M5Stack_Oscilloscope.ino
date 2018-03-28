@@ -16,7 +16,7 @@ const char *Modes[] = { "NORM", "INV", "OFF" };
 const int TRIG_AUTO = 0;
 const int TRIG_NORM = 1;
 const int TRIG_SCAN = 2;
-const char *TRIG_Modes[] = { "Auto", "Norm", "Scan", "One" };
+const char *TRIG_Modes[] = { "Auto", "Norm", "Scan" };
 const int TRIG_E_UP = 0;
 const int TRIG_E_DN = 1;
 #define RATE_MIN 0
@@ -31,13 +31,13 @@ short ch0_off = 0;
 short range1 = RANGE_MIN;
 short ch1_mode = MODE_ON;
 short ch1_off = 0;
-short rate = 3; 
+short rate = 3;
 short trig_mode = TRIG_AUTO;
-short trig_lv = 40; 
+short trig_lv = 40;
 short trig_edge = TRIG_E_UP;
-short trig_ch = 0;  
-short Start = 1; 
-short menu = 19; 
+short trig_ch = 0;
+short Start = 1;
+short menu = 19;
 short data[4][SAMPLES]; // keep twice of the number of channels to make it a double buffer
 short sample = 0;       // index for double buffer
 
@@ -487,185 +487,182 @@ void loop()
 {
 	if (trig_mode != TRIG_SCAN)
 	{
-		if (trig_mode != TRIG_SCAN)
+		unsigned long st = millis();
+		short oad;
+		if (trig_ch == 0)
 		{
-			unsigned long st = millis();
-			short oad;
-			if (trig_ch == 0)
-			{
-				oad = adRead(ad_ch0, ch0_mode, ch0_off);
-			}
-			else
-			{
-				oad = adRead(ad_ch1, ch1_mode, ch1_off);
-			}
-			for (;;)
-			{
-				short ad;
-				if (trig_ch == 0)
-				{
-					ad = adRead(ad_ch0, ch0_mode, ch0_off);
-				}
-				else
-				{
-					ad = adRead(ad_ch1, ch1_mode, ch1_off);
-				}
-
-				if (trig_edge == TRIG_E_UP)
-				{
-					if (ad >= trig_lv && ad > oad)
-					{
-						break;
-					}
-				}
-				else
-				{
-					if (ad <= trig_lv && ad < oad)
-					{
-						break;
-					}
-				}
-				oad = ad;
-
-				CheckSW();
-				if (trig_mode == TRIG_SCAN)
-				{
-					break;
-				}
-				if (trig_mode == TRIG_AUTO && (millis() - st) > 100)
-				{
-					break;
-				}
-			}
-		}
-
-		// sample and draw depending on the sampling rate
-		if (rate <= 5 && Start)
-		{
-			if (sample == 0) // change the index for the double buffer
-			{
-				sample = 2;
-			}
-			else
-			{
-				sample = 0;
-			}
-
-			if (rate == 0) // full speed, channel 0 only
-			{
-				unsigned long st = millis();
-				for (int i = 0; i < SAMPLES; i++)
-				{
-					data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
-				}
-				for (int i = 0; i < SAMPLES; i++)
-				{
-					data[sample + 1][i] = 0;
-				}
-			}
-			else if (rate == 1) // full speed, channel 1 only
-			{
-				unsigned long st = millis();
-				for (int i = 0; i < SAMPLES; i++)
-				{
-					data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
-				}
-				for (int i = 0; i < SAMPLES; i++)
-				{
-					data[sample + 0][i] = 0;
-				}
-			}
-			else if (rate == 2) // full speed, dual channel
-			{
-				unsigned long st = millis();
-				for (int i = 0; i < SAMPLES; i++)
-				{
-					data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
-					data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
-				}
-			}
-			else if (rate >= 3 && rate <= 5)  // .5ms, 1ms or 2ms sampling
-			{
-				const unsigned long r_[] = { 5000 / DOTS_DIV, 10000 / DOTS_DIV, 20000 / DOTS_DIV };
-				unsigned long st0 = millis();
-				unsigned long st = micros();
-				unsigned long r = r_[rate - 3];
-				for (int i = 0; i < SAMPLES; i++)
-				{
-					while ((st - micros()) < r)
-						;
-					st += r;
-					data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
-					data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
-				}
-			}
-			ClearAndDrawGraph();
-			CheckSW();
-			DrawGrid();
-			DrawText();
-		}
-		else if (Start)
-		{ // 5ms - 500ms sampling
-		  // copy currently showing data to another
-			if (sample == 0)
-			{
-				for (int i = 0; i < SAMPLES; i++)
-				{
-					data[2][i] = data[0][i];
-					data[3][i] = data[1][i];
-				}
-			}
-			else
-			{
-				for (int i = 0; i < SAMPLES; i++)
-				{
-					data[0][i] = data[2][i];
-					data[1][i] = data[3][i];
-				}
-			}
-
-			const unsigned long r_[] = { 50000 / DOTS_DIV, 100000 / DOTS_DIV, 200000 / DOTS_DIV,
-				500000 / DOTS_DIV, 1000000 / DOTS_DIV, 2000000 / DOTS_DIV,
-				5000000 / DOTS_DIV, 10000000 / DOTS_DIV };
-			unsigned long st0 = millis();
-			unsigned long st = micros();
-			for (int i = 0; i < SAMPLES; i++)
-			{
-				while ((st - micros()) < r_[rate - 6])
-				{
-					CheckSW();
-					if (rate < 6)
-					{
-						break;
-					}
-				}
-				if (rate < 6) // sampling rate has been changed
-				{
-					M5.Lcd.fillScreen(BLACK);
-					break;
-				}
-				st += r_[rate - 6];
-				if (st - micros() > r_[rate - 6]) // sampling rate has been changed to shorter interval
-				{
-					st = micros();
-				}
-				if (!Start)
-				{
-					i--;
-					continue;
-				}
-				data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
-				data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
-				ClearAndDrawDot(i);
-			}
-			Serial.println(millis() - st0);
-			DrawGrid();
-			DrawText();
+			oad = adRead(ad_ch0, ch0_mode, ch0_off);
 		}
 		else
 		{
-			CheckSW();
+			oad = adRead(ad_ch1, ch1_mode, ch1_off);
 		}
-		M5.update();
+		for (;;)
+		{
+			short ad;
+			if (trig_ch == 0)
+			{
+				ad = adRead(ad_ch0, ch0_mode, ch0_off);
+			}
+			else
+			{
+				ad = adRead(ad_ch1, ch1_mode, ch1_off);
+			}
+
+			if (trig_edge == TRIG_E_UP)
+			{
+				if (ad >= trig_lv && ad > oad)
+				{
+					break;
+				}
+			}
+			else
+			{
+				if (ad <= trig_lv && ad < oad)
+				{
+					break;
+				}
+			}
+			oad = ad;
+
+			CheckSW();
+			if (trig_mode == TRIG_SCAN)
+			{
+				break;
+			}
+			if (trig_mode == TRIG_AUTO && (millis() - st) > 100)
+			{
+				break;
+			}
+		}
 	}
+
+	// sample and draw depending on the sampling rate
+	if (rate <= 5 && Start)
+	{
+		if (sample == 0) // change the index for the double buffer
+		{
+			sample = 2;
+		}
+		else
+		{
+			sample = 0;
+		}
+
+		if (rate == 0) // full speed, channel 0 only
+		{
+			unsigned long st = millis();
+			for (int i = 0; i < SAMPLES; i++)
+			{
+				data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
+			}
+			for (int i = 0; i < SAMPLES; i++)
+			{
+				data[sample + 1][i] = 0;
+			}
+		}
+		else if (rate == 1) // full speed, channel 1 only
+		{
+			unsigned long st = millis();
+			for (int i = 0; i < SAMPLES; i++)
+			{
+				data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
+			}
+			for (int i = 0; i < SAMPLES; i++)
+			{
+				data[sample + 0][i] = 0;
+			}
+		}
+		else if (rate == 2) // full speed, dual channel
+		{
+			unsigned long st = millis();
+			for (int i = 0; i < SAMPLES; i++)
+			{
+				data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
+				data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
+			}
+		}
+		else if (rate >= 3 && rate <= 5)  // .5ms, 1ms or 2ms sampling
+		{
+			const unsigned long r_[] = { 5000 / DOTS_DIV, 10000 / DOTS_DIV, 20000 / DOTS_DIV };
+			unsigned long st0 = millis();
+			unsigned long st = micros();
+			unsigned long r = r_[rate - 3];
+			for (int i = 0; i < SAMPLES; i++)
+			{
+				while ((st - micros()) < r)
+					;
+				st += r;
+				data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
+				data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
+			}
+		}
+		ClearAndDrawGraph();
+		CheckSW();
+		DrawGrid();
+		DrawText();
+	}
+	else if (Start)
+	{ // 5ms - 500ms sampling
+	  // copy currently showing data to another
+		if (sample == 0)
+		{
+			for (int i = 0; i < SAMPLES; i++)
+			{
+				data[2][i] = data[0][i];
+				data[3][i] = data[1][i];
+			}
+		}
+		else
+		{
+			for (int i = 0; i < SAMPLES; i++)
+			{
+				data[0][i] = data[2][i];
+				data[1][i] = data[3][i];
+			}
+		}
+
+		const unsigned long r_[] = { 50000 / DOTS_DIV, 100000 / DOTS_DIV, 200000 / DOTS_DIV,
+			500000 / DOTS_DIV, 1000000 / DOTS_DIV, 2000000 / DOTS_DIV,
+			5000000 / DOTS_DIV, 10000000 / DOTS_DIV };
+		unsigned long st0 = millis();
+		unsigned long st = micros();
+		for (int i = 0; i < SAMPLES; i++)
+		{
+			while ((st - micros()) < r_[rate - 6])
+			{
+				CheckSW();
+				if (rate < 6)
+				{
+					break;
+				}
+			}
+			if (rate < 6) // sampling rate has been changed
+			{
+				M5.Lcd.fillScreen(BLACK);
+				break;
+			}
+			st += r_[rate - 6];
+			if (st - micros() > r_[rate - 6]) // sampling rate has been changed to shorter interval
+			{
+				st = micros();
+			}
+			if (!Start)
+			{
+				i--;
+				continue;
+			}
+			data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
+			data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
+			ClearAndDrawDot(i);
+		}
+		Serial.println(millis() - st0);
+		DrawGrid();
+		DrawText();
+	}
+	else
+	{
+		CheckSW();
+	}
+	M5.update();
 }
