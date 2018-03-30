@@ -26,9 +26,9 @@ const char *Rates[] = { "F1-1", "F1-2", "  F2", " 5ms", "10ms", "20ms", "50ms", 
 #define RANGE_MAX 4
 const char *Ranges[] = { " 1V", "0.5V", "0.2V", "0.1V", "50mV" };
 int range0 = RANGE_MIN;
+short range1 = RANGE_MIN;
 short ch0_mode = MODE_ON;
 short ch0_off = 0;
-short range1 = RANGE_MIN;
 short ch1_mode = MODE_ON;
 short ch1_off = 0;
 short rate = 3;
@@ -40,8 +40,13 @@ short Start = 1;
 short menu = 19;
 short data[4][SAMPLES]; // keep twice of the number of channels to make it a double buffer
 short sample = 0;       // index for double buffer
+int amplitude = 0;
+int amplitudeStep = 5;
 
-						///////////////////////////////////////////////////////////////////////////////////////////////
+TaskHandle_t LedC_Gen;
+TaskHandle_t SigmaDeltaGen;
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 #define CH1COLOR YELLOW
 #define CH2COLOR CYAN
 #define GREY 0x7BEF
@@ -65,9 +70,9 @@ void DrawText()
 	M5.Lcd.setCursor(270, 70);
 	M5.Lcd.println(Modes[ch1_mode]);
 	M5.Lcd.setCursor(270, 80);
-	M5.Lcd.println("OF1:" + String(ch0_off));
+	M5.Lcd.println("OFS1:" + String(ch0_off));
 	M5.Lcd.setCursor(270, 90);
-	M5.Lcd.println("OF2:" + String(ch1_off));
+	M5.Lcd.println("OFS2:" + String(ch1_off));
 	M5.Lcd.setCursor(270, 100);
 	M5.Lcd.println(trig_ch == 0 ? "T:1" : "T:2");
 	M5.Lcd.setCursor(270, 110);
@@ -410,9 +415,6 @@ inline long adRead(short ch, short mode, int off)
 	return a;
 }
 
-int brightness = 0; // how bright the LED is
-int fadeAmount = 5; // how many points to fade the LED by
-
 void ledcAnalogWrite(uint8_t channel, uint32_t value, uint32_t valueMax = 255)
 {
 	uint32_t duty = (8191 / valueMax) * min(value, valueMax);
@@ -428,11 +430,11 @@ void LedC_Task(void *parameter)
 
 	for (;;)
 	{
-		ledcAnalogWrite(0, brightness);
-		brightness = brightness + fadeAmount;
-		if (brightness <= 0 || brightness >= 255)
+		ledcAnalogWrite(0, amplitude);
+		amplitude = amplitude + amplitudeStep;
+		if (amplitude <= 0 || amplitude >= 255)
 		{
-			fadeAmount = -fadeAmount;
+			amplitudeStep = -amplitudeStep;
 		}
 		delay(30);
 	}
@@ -452,10 +454,6 @@ void SigmaDelta_Task(void *parameter)
 	}
 }
 
-
-TaskHandle_t LedC_Gen;
-TaskHandle_t SigmaDeltaGen;
-
 void setup()
 {
 	M5.begin();
@@ -465,22 +463,22 @@ void setup()
 	M5.Lcd.setBrightness(100);
 
 	xTaskCreatePinnedToCore(
-		LedC_Task,    /* Task function. */
-		"LedC_Task", /* name of task. */
+		LedC_Task,				 /* Task function. */
+		"LedC_Task",			 /* name of the task, a name just for humans */
 		8192,                    /* Stack size of task */
 		NULL,                    /* parameter of the task */
 		2,                       /* priority of the task */
-		&LedC_Gen,              /* Task handle to keep track of created task */
-		0);                      /*cpu core number to be assigned to*/
+		&LedC_Gen,               /* Task handle to keep track of the created task */
+		0);                      /*cpu core number where the task is assigned*/
 
 	xTaskCreatePinnedToCore(
-		SigmaDelta_Task,    /* Task function. */
-		"SigmaDelta_Task", /* name of task. */
+		SigmaDelta_Task,		 /* Task function. */
+		"SigmaDelta_Task",		 /* name of task, a name just for humans */
 		8192,                    /* Stack size of task */
 		NULL,                    /* parameter of the task */
 		2,                       /* priority of the task */
-		&SigmaDeltaGen,              /* Task handle to keep track of created task */
-		0);                      /*cpu core number to be assigned to*/
+		&SigmaDeltaGen,          /* Task handle to keep track of the created task */
+		0);                      /*cpu core number where the task is assigned*/
 }
 
 void loop()
