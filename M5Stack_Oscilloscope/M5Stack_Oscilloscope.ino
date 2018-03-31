@@ -654,7 +654,6 @@ void loop()
 			data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
 			ClearAndDrawDot(i);
 		}
-		Serial.println(millis() - st0);
 		DrawGrid();
 		DrawText();
 	}
