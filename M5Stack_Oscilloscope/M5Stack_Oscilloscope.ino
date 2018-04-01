@@ -29,7 +29,7 @@ int range0 = RANGE_MIN;
 short range1 = RANGE_MIN;
 short ch0_mode = MODE_ON;
 short ch0_off = 0;
-short ch1_mode = MODE_ON;
+short ch1_mode = MODE_OFF;
 short ch1_off = 0;
 short rate = 3;
 short trig_mode = TRIG_AUTO;
@@ -430,13 +430,7 @@ void LedC_Task(void *parameter)
 
 	for (;;)
 	{
-		ledcAnalogWrite(0, amplitude);
-		amplitude = amplitude + amplitudeStep;
-		if (amplitude <= 0 || amplitude >= 255)
-		{
-			amplitudeStep = -amplitudeStep;
-		}
-		delay(30);
+		ledcAnalogWrite(0, 50);
 	}
 	vTaskDelete(NULL);
 }
@@ -462,23 +456,25 @@ void setup()
 	DrawText();
 	M5.Lcd.setBrightness(100);
 
-	xTaskCreatePinnedToCore(
-		LedC_Task,				 /* Task function. */
-		"LedC_Task",			 /* name of the task, a name just for humans */
-		8192,                    /* Stack size of task */
-		NULL,                    /* parameter of the task */
-		2,                       /* priority of the task */
-		&LedC_Gen,               /* Task handle to keep track of the created task */
-		0);                      /*cpu core number where the task is assigned*/
+	//// Uncomment this lines to enable the signal generators
+	////make sure the speaker is disabled since this will cause a noise on M5Stack speaker
+	//xTaskCreatePinnedToCore(
+	//	LedC_Task,				 /* Task function. */
+	//	"LedC_Task",			 /* name of the task, a name just for humans */
+	//	8192,                    /* Stack size of task */
+	//	NULL,                    /* parameter of the task */
+	//	2,                       /* priority of the task */
+	//	&LedC_Gen,               /* Task handle to keep track of the created task */
+	//	0);                      /*cpu core number where the task is assigned*/
 
-	xTaskCreatePinnedToCore(
-		SigmaDelta_Task,		 /* Task function. */
-		"SigmaDelta_Task",		 /* name of task, a name just for humans */
-		8192,                    /* Stack size of task */
-		NULL,                    /* parameter of the task */
-		2,                       /* priority of the task */
-		&SigmaDeltaGen,          /* Task handle to keep track of the created task */
-		0);                      /*cpu core number where the task is assigned*/
+	//xTaskCreatePinnedToCore(
+	//	SigmaDelta_Task,		 /* Task function. */
+	//	"SigmaDelta_Task",		 /* name of task, a name just for humans */
+	//	8192,                    /* Stack size of task */
+	//	NULL,                    /* parameter of the task */
+	//	2,                       /* priority of the task */
+	//	&SigmaDeltaGen,          /* Task handle to keep track of the created task */
+	//	0);                      /*cpu core number where the task is assigned*/
 }
 
 void loop()
@@ -576,8 +572,14 @@ void loop()
 			unsigned long st = millis();
 			for (int i = 0; i < SAMPLES; i++)
 			{
-				data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
-				data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
+          if (ch0_mode != MODE_OFF)
+          {
+            data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
+          }
+          if (ch1_mode != MODE_OFF)
+          {
+            data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
+          }
 			}
 		}
 		else if (rate >= 3 && rate <= 5)  // .5ms, 1ms or 2ms sampling
@@ -591,8 +593,14 @@ void loop()
 				while ((st - micros()) < r)
 					;
 				st += r;
-				data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
-				data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
+         if (ch0_mode != MODE_OFF)
+          {
+            data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
+          }
+          if (ch1_mode != MODE_OFF)
+          {
+            data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
+          }
 			}
 		}
 		ClearAndDrawGraph();
@@ -650,8 +658,14 @@ void loop()
 				i--;
 				continue;
 			}
-			data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
-			data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
+        if (ch0_mode != MODE_OFF)
+          {
+            data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
+          }
+          if (ch1_mode != MODE_OFF)
+          {
+            data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
+          }
 			ClearAndDrawDot(i);
 		}
 		DrawGrid();

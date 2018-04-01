@@ -21,7 +21,7 @@
 #define ARDUINO_M5Stack_Core_ESP32
 #define ARDUINO_ARCH_ESP32
 #define ESP32
-#define CORE_DEBUG_LEVEL 4
+#define CORE_DEBUG_LEVEL 0
 #define __cplusplus 201103L
 #undef __cplusplus
 #define __cplusplus 201103L
