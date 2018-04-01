@@ -34,7 +34,3 @@
 #### - ESP32 MAXIMUM GPIO input voltage is 3.3V
 #### - Feeding higher voltages on INPUT pin's can damage the chip
 #### - Consider using a voltage divider to measure higher voltage signals
-## - The ESP32 ADC will cause some noise on the M5Stack speaker.
-## Consider disabling the sound by soldering this bridge on the PCB.
-
-![image](M5Stack_Oscilloscope/0Okim55.jpg)
