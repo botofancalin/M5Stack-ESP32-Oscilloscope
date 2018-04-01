@@ -5,6 +5,7 @@
 
 ## About
 - Fully functional Dual Channel Oscilloscope running on M5Stack ESP32 development kit
+- The project is made in Visual Studio using VisualMicro Plugin: http://www.visualmicro.com/
 - Channel 1 Input: Pin 35
 - Channel 2 input: Pin 36
 
