@@ -2,23 +2,17 @@
 
 const int LCD_WIDTH = 320;
 const int LCD_HEIGHT = 240;
-const int SAMPLES = 320;
+const int SAMPLES = LCD_WIDTH;
 const int DOTS_DIV = 30;
-
 const int ad_ch0 = 35; // Analog 35 pin for channel 0
 const int ad_ch1 = 36; // Analog 36 pin for channel 1
 const long VREF[] = { 250, 500, 1250, 2500, 5000 };
 const int MILLIVOL_per_dot[] = { 33, 17, 6, 3, 2 };
-const int MODE_ON = 0;
-const int MODE_INV = 1;
-const int MODE_OFF = 2;
+const int MODE_ON = 0, MODE_INV = 1, MODE_OFF = 2;
 const char *Modes[] = { "NORM", "INV", "OFF" };
-const int TRIG_AUTO = 0;
-const int TRIG_NORM = 1;
-const int TRIG_SCAN = 2;
+const int TRIG_AUTO = 0, TRIG_NORM = 1, TRIG_SCAN = 2;
 const char *TRIG_Modes[] = { "Auto", "Norm", "Scan" };
-const int TRIG_E_UP = 0;
-const int TRIG_E_DN = 1;
+const int TRIG_E_UP = 0, TRIG_E_DN = 1;
 #define RATE_MIN 0
 #define RATE_MAX 13
 const char *Rates[] = { "F1-1", "F1-2", "  F2", " 5ms", "10ms", "20ms", "50ms", "0.1s", "0.2s", "0.5s", "1s", "2s", "5s", "10s" };
@@ -29,7 +23,7 @@ int range0 = RANGE_MIN;
 short range1 = RANGE_MIN;
 short ch0_mode = MODE_ON;
 short ch0_off = 0;
-short ch1_mode = MODE_ON;
+short ch1_mode = MODE_OFF;
 short ch1_off = 0;
 short rate = 3;
 short trig_mode = TRIG_AUTO;
@@ -87,19 +81,19 @@ void CheckSW()
 			Start = !Start;
 			break;
 		case 29:
-			if (range0 > 0)
+			if (range0 > RANGE_MIN)
 			{
 				range0--;
 			}
 			break;
 		case 39:
-			if (range1 > 0)
+			if (range1 > RANGE_MIN)
 			{
 				range1--;
 			}
 			break;
 		case 49:
-			if (rate > 0)
+			if (rate > RATE_MIN)
 			{
 				rate--;
 			}
@@ -140,7 +134,7 @@ void CheckSW()
 			trig_ch = !trig_ch;
 			break;
 		case 109:
-			if (trig_mode > 0)
+			if (trig_mode > TRIG_AUTO)
 			{
 				trig_mode--;
 			}
@@ -228,7 +222,7 @@ void CheckSW()
 			}
 			else
 			{
-				trig_mode = 0;
+				trig_mode = TRIG_AUTO;
 			}
 			break;
 		case 119:
@@ -259,10 +253,7 @@ void DrawGrid()
 			M5.Lcd.drawPixel(x, y, GREY);
 			CheckSW();
 		}
-		if (LCD_HEIGHT == 240)
-		{
-			M5.Lcd.drawPixel(x, LCD_HEIGHT - 1, GREY);
-		}
+		M5.Lcd.drawPixel(x, LCD_HEIGHT - 1, GREY);
 	}
 	for (int x = 0; x <= SAMPLES; x += DOTS_DIV) // Vertical Line
 	{
