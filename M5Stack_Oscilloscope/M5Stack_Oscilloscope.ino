@@ -36,7 +36,7 @@ short trig_mode = TRIG_AUTO;
 short trig_lv = 40;
 short trig_edge = TRIG_E_UP;
 short trig_ch = 0;
-short Start = 1;
+bool Start = true;
 short menu = 19;
 short data[4][SAMPLES]; // keep twice of the number of channels to make it a double buffer
 short sample = 0;       // index for double buffer
@@ -55,32 +55,20 @@ void DrawText()
 {
 	M5.Lcd.setTextColor(WHITE);
 	M5.Lcd.setTextSize(1);
-	M5.Lcd.fillRect(270, 19, 70, 121, BLACK);
+	M5.Lcd.fillRect(270, 19, 70, 131, BLACK);
 	M5.Lcd.fillRect(270, menu, 70, 10, BLUE);
-	M5.Lcd.setCursor(270, 20);
-	M5.Lcd.println(Start == 0 ? "Stop" : "Run");
-	M5.Lcd.setCursor(270, 30);
-	M5.Lcd.println(String(String(Ranges[range0]) + "/DIV"));
-	M5.Lcd.setCursor(270, 40);
-	M5.Lcd.println(String(String(Ranges[range1]) + "/DIV"));
-	M5.Lcd.setCursor(270, 50);
-	M5.Lcd.println(String(String(Rates[rate]) + "/DIV"));
-	M5.Lcd.setCursor(270, 60);
-	M5.Lcd.println(Modes[ch0_mode]);
-	M5.Lcd.setCursor(270, 70);
-	M5.Lcd.println(Modes[ch1_mode]);
-	M5.Lcd.setCursor(270, 80);
-	M5.Lcd.println("OFS1:" + String(ch0_off));
-	M5.Lcd.setCursor(270, 90);
-	M5.Lcd.println("OFS2:" + String(ch1_off));
-	M5.Lcd.setCursor(270, 100);
-	M5.Lcd.println(trig_ch == 0 ? "T:1" : "T:2");
-	M5.Lcd.setCursor(270, 110);
-	M5.Lcd.println(TRIG_Modes[trig_mode]);
-	M5.Lcd.setCursor(270, 120);
-	M5.Lcd.println("Tlv:" + String(trig_lv));
-	M5.Lcd.setCursor(270, 130);
-	M5.Lcd.println((trig_edge == TRIG_E_UP) ? "T:UP" : "T:DN");
+	M5.Lcd.drawString((Start == 0 ? "Stop" : "Run"), 270, 20);
+	M5.Lcd.drawString(String(String(Ranges[range0]) + "/DIV"), 270, 30);
+	M5.Lcd.drawString(String(String(Ranges[range1]) + "/DIV"), 270, 40);
+	M5.Lcd.drawString(String(String(Rates[rate]) + "/DIV"), 270, 50);
+	M5.Lcd.drawString(String(Modes[ch0_mode]), 270, 60);
+	M5.Lcd.drawString(String(Modes[ch1_mode]), 270, 70);
+	M5.Lcd.drawString(String("OFS1:" + String(ch0_off)), 270, 80);
+	M5.Lcd.drawString(String("OFS2:" + String(ch1_off)), 270, 90);
+	M5.Lcd.drawString(String(trig_ch == 0 ? "T:1" : "T:2"), 270, 100);
+	M5.Lcd.drawString(String(TRIG_Modes[trig_mode]), 270, 110);
+	M5.Lcd.drawString(String("Tlv:" + String(trig_lv)), 270, 120);
+	M5.Lcd.drawString(String((trig_edge == TRIG_E_UP) ? "T:UP" : "T:DN"), 270, 130);
 }
 
 void CheckSW()
@@ -96,14 +84,7 @@ void CheckSW()
 		switch (menu)
 		{
 		case 19:
-			if (Start == 0)
-			{
-				Start = 1;
-			}
-			else
-			{
-				Start = 0;
-			}
+			Start = !Start;
 			break;
 		case 29:
 			if (range0 > 0)
@@ -124,38 +105,39 @@ void CheckSW()
 			}
 			break;
 		case 59:
-			if (ch0_mode > 0)
+			if (ch0_mode > MODE_ON)
 			{
 				ch0_mode--;
 			}
+			else
+			{
+				ch0_mode = MODE_OFF;
+			}
 			break;
 		case 69:
-			if (ch1_mode > 0)
+			if (ch1_mode > MODE_ON)
 			{
 				ch1_mode--;
 			}
+			else
+			{
+				ch1_mode = MODE_OFF;
+			}
 			break;
 		case 79:
-			if (ch0_off > -1023)
+			if (ch0_off > -4095)
 			{
-				ch0_off -= 1024 / VREF[range0];
+				ch0_off -= 4096 / VREF[range0];
 			}
 			break;
 		case 89:
-			if (ch1_off > -1023)
+			if (ch1_off > -4095)
 			{
-				ch1_off -= 1024 / VREF[range1];
+				ch1_off -= 4096 / VREF[range1];
 			}
 			break;
 		case 99:
-			if (trig_ch == 0)
-			{
-				trig_ch = 1;
-			}
-			else
-			{
-				trig_ch = 0;
-			}
+			trig_ch = !trig_ch;
 			break;
 		case 109:
 			if (trig_mode > 0)
@@ -174,14 +156,7 @@ void CheckSW()
 			}
 			break;
 		case 129:
-			if (trig_edge == TRIG_E_UP)
-			{
-				trig_edge = TRIG_E_DN;
-			}
-			else
-			{
-				trig_edge = TRIG_E_UP;
-			}
+			trig_edge = !trig_edge;
 			break;
 		}
 		return;
@@ -191,14 +166,7 @@ void CheckSW()
 		switch (menu)
 		{
 		case 19:
-			if (Start == 0)
-			{
-				Start = 1;
-			}
-			else
-			{
-				Start = 0;
-			}
+			Start = !Start;
 			break;
 		case 29:
 			if (range0 < RANGE_MAX)
@@ -219,38 +187,39 @@ void CheckSW()
 			}
 			break;
 		case 59:
-			if (ch0_mode < 2)
+			if (ch0_mode < MODE_OFF)
 			{
 				ch0_mode++;
 			}
+			else
+			{
+				ch0_mode = MODE_ON;
+			}
 			break;
 		case 69:
-			if (ch1_mode < 2)
+			if (ch1_mode < MODE_OFF)
 			{
 				ch1_mode++;
 			}
+			else
+			{
+				ch1_mode = MODE_ON;
+			}
 			break;
 		case 79:
-			if (ch0_off < 1023)
+			if (ch0_off < 4095)
 			{
-				ch0_off += 1024 / VREF[range0];
+				ch0_off += 4096 / VREF[range0];
 			}
 			break;
 		case 89:
-			if (ch1_off < 1023)
+			if (ch1_off < 4095)
 			{
-				ch1_off += 1024 / VREF[range1];
+				ch1_off += 4096 / VREF[range1];
 			}
 			break;
 		case 99:
-			if (trig_ch == 0)
-			{
-				trig_ch = 1;
-			}
-			else
-			{
-				trig_ch = 0;
-			}
+			trig_ch = !trig_ch;
 			break;
 		case 109:
 			if (trig_mode < TRIG_SCAN)
@@ -269,14 +238,7 @@ void CheckSW()
 			}
 			break;
 		case 129:
-			if (trig_edge == TRIG_E_UP)
-			{
-				trig_edge = TRIG_E_DN;
-			}
-			else
-			{
-				trig_edge = TRIG_E_UP;
-			}
+			trig_edge = !trig_edge;
 			break;
 		}
 		return;
@@ -310,7 +272,11 @@ void DrawGrid()
 			CheckSW();
 		}
 	}
+	M5.Lcd.drawString("<", 60, 220, 2);
+	M5.Lcd.drawString("Menu", 145, 220, 2);
+	M5.Lcd.drawString(">", 252, 220, 2);
 }
+
 
 void DrawGrid(int x)
 {
@@ -464,14 +430,12 @@ void setup()
 	M5.Lcd.setBrightness(100);
 	dacWrite(25, 0);
 
-	// Uncomment this lines to enable the signal generators
-	//make sure the speaker is disabled since this will cause a noise on M5Stack speaker
 	xTaskCreatePinnedToCore(
 		LedC_Task,				 /* Task function. */
 		"LedC_Task",			 /* name of the task, a name just for humans */
 		8192,                    /* Stack size of task */
 		NULL,                    /* parameter of the task */
-		2,                       /* priority of the task */
+		1,                       /* priority of the task */
 		&LedC_Gen,               /* Task handle to keep track of the created task */
 		0);                      /*cpu core number where the task is assigned*/
 
@@ -480,10 +444,11 @@ void setup()
 		"SigmaDelta_Task",		 /* name of task, a name just for humans */
 		8192,                    /* Stack size of task */
 		NULL,                    /* parameter of the task */
-		2,                       /* priority of the task */
+		1,                       /* priority of the task */
 		&SigmaDeltaGen,          /* Task handle to keep track of the created task */
 		0);                      /*cpu core number where the task is assigned*/
 }
+unsigned long a;
 
 void loop()
 {
@@ -553,7 +518,6 @@ void loop()
 
 		if (rate == 0) // full speed, channel 0 only
 		{
-			unsigned long st = millis();
 			for (int i = 0; i < SAMPLES; i++)
 			{
 				data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
@@ -565,7 +529,6 @@ void loop()
 		}
 		else if (rate == 1) // full speed, channel 1 only
 		{
-			unsigned long st = millis();
 			for (int i = 0; i < SAMPLES; i++)
 			{
 				data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
@@ -577,38 +540,26 @@ void loop()
 		}
 		else if (rate == 2) // full speed, dual channel
 		{
-			unsigned long st = millis();
 			for (int i = 0; i < SAMPLES; i++)
 			{
-          if (ch0_mode != MODE_OFF)
-          {
-            data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
-          }
-          if (ch1_mode != MODE_OFF)
-          {
-            data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
-          }
+				data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
+				data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
 			}
 		}
-		else if (rate >= 3 && rate <= 5)  // .5ms, 1ms or 2ms sampling
+		else if (rate >= 3 && rate <= 5) // .5ms, 1ms or 2ms sampling
 		{
 			const unsigned long r_[] = { 5000 / DOTS_DIV, 10000 / DOTS_DIV, 20000 / DOTS_DIV };
-			unsigned long st0 = millis();
 			unsigned long st = micros();
 			unsigned long r = r_[rate - 3];
 			for (int i = 0; i < SAMPLES; i++)
 			{
 				while ((st - micros()) < r)
+				{
 					;
+				}
 				st += r;
-         if (ch0_mode != MODE_OFF)
-          {
-            data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
-          }
-          if (ch1_mode != MODE_OFF)
-          {
-            data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
-          }
+				data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
+				data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
 			}
 		}
 		ClearAndDrawGraph();
@@ -639,7 +590,6 @@ void loop()
 		const unsigned long r_[] = { 50000 / DOTS_DIV, 100000 / DOTS_DIV, 200000 / DOTS_DIV,
 			500000 / DOTS_DIV, 1000000 / DOTS_DIV, 2000000 / DOTS_DIV,
 			5000000 / DOTS_DIV, 10000000 / DOTS_DIV };
-		unsigned long st0 = millis();
 		unsigned long st = micros();
 		for (int i = 0; i < SAMPLES; i++)
 		{
@@ -666,14 +616,8 @@ void loop()
 				i--;
 				continue;
 			}
-        if (ch0_mode != MODE_OFF)
-          {
-            data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
-          }
-          if (ch1_mode != MODE_OFF)
-          {
-            data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
-          }
+			data[sample + 0][i] = adRead(ad_ch0, ch0_mode, ch0_off);
+			data[sample + 1][i] = adRead(ad_ch1, ch1_mode, ch1_off);
 			ClearAndDrawDot(i);
 		}
 		DrawGrid();
