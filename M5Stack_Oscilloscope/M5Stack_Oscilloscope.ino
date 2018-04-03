@@ -448,7 +448,6 @@ void setup()
 		&SigmaDeltaGen,          /* Task handle to keep track of the created task */
 		0);                      /*cpu core number where the task is assigned*/
 }
-unsigned long a;
 
 void loop()
 {
