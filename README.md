@@ -5,6 +5,7 @@
 
 ## About
 - Fully functional Dual Channel Oscilloscope running on M5Stack ESP32 development kit
+- The project is made in Visual Studio using vMicro Plugin: http://www.visualmicro.com/
 - Channel 1 Input: Pin 35
 - Channel 2 input: Pin 36
 
@@ -34,7 +35,3 @@
 #### - ESP32 MAXIMUM GPIO input voltage is 3.3V
 #### - Feeding higher voltages on INPUT pin's can damage the chip
 #### - Consider using a voltage divider to measure higher voltage signals
-## - The ESP32 ADC will cause some noise on the M5Stack speaker.
-## Consider disabling the sound by soldering this bridge on the PCB.
-
-![image](M5Stack_Oscilloscope/0Okim55.jpg)
