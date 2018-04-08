@@ -1,29 +1,37 @@
 # M5Stack ESP32 Oscilloscope
 
-![image](20180407_191741.jpg)
+![image](M5Stack_Oscilloscope/twoChOsc.jpg)
+ 
+ ## About
+- Fully functional Dual Channel Oscilloscope running on M5Stack ESP32 development kit
+- The project is made in Visual Studio using vMicro Plugin: http://www.visualmicro.com/
+- Channel 1 Input: Pin 35
+- Channel 2 input: Pin 36
 
-## About
-- A firmware that include several "sketches" as builtin apps
-- Can run all included apps without reflashing/rebooting
-- The menu images are stored on SdCard so they are customisable
+## Testing and callibration
+- PWM signal Output: Pin 2
+- SignaDelta Output: Pin 5
+ 
+### Oscilloscope Menu:
+1. Run/Stop
+2. Channel 1 range
+3. Channel 2 range
+4. Channel 1 and 2 rate
+5. Channel 1 mode (Normal, Inverted, Off) 
+6. Channel 2 mode (Normal, Inverted, Off) 
+7. Channel 1 Offset
+8. Channel 2 Offset
+9. Trigger Channel: 1 or 2
+10. Trigger mode Auto, Normal, Scan
+11. Trigger Level
+12. Trigger Edge: Rising (UP) or Falling (DN)
 
-- The project is made on Visual Studio, using VisualMicro plugin.
-- The project use modifed M5Stack and M5StackSAM libraryes. 
-Make sure you uninstall the original M5Stack and M5Stack libraryes from Arduino IDE to avoid conflicts on compile.
 
-## Included apps:
-- The well known Oscilloscope
-- Alien Shooter game
-- Flappy Bird game
-- Wifi Packet Monitor
-- Wifi Scanner
-- I2C Scanner
-- Voltmeter with measurements history
-- DHT Temperature and Humidity - Works with any DHT sensor
-- System Informations
-- Display Backlight settings with values stored on emulated EEPROM
-- Stopwatch
-- a demo clock... i will do some later work on it or i will just remove it...
-
-![image](20180407_191824.jpg)
-![image](20180407_192148.jpg)
+- Key B: Menu selection
+- Key A: Selected item - 
+- Key C: Selected item + 
+ 
+## Warning
+#### - ESP32 MAXIMUM GPIO input voltage is 3.3V
+#### - Feeding higher voltages on INPUT pin's can damage the chip
+#### - Consider using a voltage divider to measure higher voltage signals
