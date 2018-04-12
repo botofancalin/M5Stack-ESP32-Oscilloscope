@@ -22,18 +22,18 @@ const int TRIG_E_DN = 1;
 #define RATE_MIN 0
 #define RATE_MAX 13
 const char *Rates[] = { "F1-1", "F1-2", "  F2", " 5ms", "10ms", "20ms", "50ms", "0.1s", "0.2s", "0.5s", "1s", "2s", "5s", "10s" };
+short rate = 3;
 #define RANGE_MIN 0
 #define RANGE_MAX 4
 const char *Ranges[] = { " 1V", "0.5V", "0.2V", "0.1V", "50mV" };
 int range0 = RANGE_MIN;
 short range1 = RANGE_MIN;
 short ch0_mode = MODE_ON;
-short ch0_off = 0;
 short ch1_mode = MODE_OFF;
-short ch1_off = 0;
-int rate = 3;
+int ch0_off = 0;
+int ch1_off = 0;
 short trig_mode = TRIG_AUTO;
-short trig_lv = 40;
+int trig_lv = 40;
 short trig_edge = TRIG_E_UP;
 short trig_ch = 0;
 short Start = 1;
@@ -307,30 +307,6 @@ void ClearAndDrawDot(int i)
 		M5.Lcd.drawLine(i - 1, LCD_HEIGHT - data[sample + 1][i - 1], i, LCD_HEIGHT - data[sample + 1][i], CH2COLOR);
 	}
 	DrawGrid(i);
-}
-
-void DrawGraph()
-{
-	for (int x = 0; x < SAMPLES; x++)
-	{
-		M5.Lcd.drawPixel(x, LCD_HEIGHT - data[sample + 0][x], CH1COLOR);
-		M5.Lcd.drawPixel(x, LCD_HEIGHT - data[sample + 1][x], CH2COLOR);
-	}
-}
-
-void ClearGraph()
-{
-	int clear = 0;
-
-	if (sample == 0)
-	{
-		clear = 2;
-	}
-	for (int x = 0; x < SAMPLES; x++)
-	{
-		M5.Lcd.drawPixel(x, LCD_HEIGHT - data[clear + 0][x], BLACK);
-		M5.Lcd.drawPixel(x, LCD_HEIGHT - data[clear + 1][x], BLACK);
-	}
 }
 
 inline long adRead(short ch, short mode, int off)
